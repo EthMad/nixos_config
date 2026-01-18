@@ -132,4 +132,8 @@
     "nix-command"
     "flakes"
   ];
+
+  # Enabling flatpaks for Sober a way to play roblox on linux
+  services.flatpak.enable = true;
+
 }
