@@ -25,7 +25,15 @@
 
    git
 
-  ];
+
+   qbittorrent
+   btop
+   vlc
+   
+
+   libreoffice
+
+   ];
 
   programs.steam = {
    enable = true;
