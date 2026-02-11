@@ -24,6 +24,9 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
+
+
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, ... }@inputs:
@@ -40,7 +43,9 @@
     in {
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = {inherit inputs;};
+      specialArgs = {
+        inherit inputs;
+      };
       modules = [
         # Add the overlay so we can access pkgs.unstable
         ({ config, pkgs, ... }: {
@@ -53,6 +58,8 @@
           home-manager.sharedModules = [
             inputs.plasma-manager.homeModules.plasma-manager
           ];
+
+          #home-manager.backupFileExtension = "backup";
         }
       ];
     };

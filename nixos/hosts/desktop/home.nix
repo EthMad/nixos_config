@@ -215,4 +215,61 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+
+
+
+  programs.firefox = {
+    enable = true;
+
+    profiles.default = {
+      id = 0;
+      name = "default";
+      isDefault = true;
+
+      # Your userChrome.css
+      userChrome = ''
+      /* Hide the horizontal tab bar */
+      #TabsToolbar {
+        visibility: collapse !important;
+      }
+
+      /* Hide the sidebar header */
+      #sidebar-header {
+        visibility: collapse !important;
+      }
+
+      /* Hide Firefox's new native sidebar panel (if using Firefox 133+) */
+      #sidebar-main,
+      #sidebar-launcher-splitter {
+        display: none !important;
+      }
+
+      /* Optional: Hide the sidebar splitter for a cleaner look */
+      #sidebar-box[sidebarcommand="_3c078156-979c-498b-8990-85f7987dd929_-sidebar-action"] + #sidebar-splitter {
+        display: none !important;
+      }
+
+      /* Clean up sidebar styling */
+      #sidebar-box {
+        padding: 0 !important;
+      }
+
+      #sidebar-box #sidebar {
+        box-shadow: none !important;
+        border: none !important;
+        outline: none !important;
+        border-radius: 0 !important;
+      }
+      '';
+
+
+      settings = {
+        # Enable userChrome.css support
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "sidebar.verticalTabs" = true;
+        # Other settings...
+      };
+    };
+  };
 }
