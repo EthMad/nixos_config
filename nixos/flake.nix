@@ -38,7 +38,7 @@
         };
       };
     in {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {inherit inputs;};
       modules = [
@@ -47,11 +47,11 @@
           nixpkgs.overlays = [ overlay-unstable ];
         })
 
-        ./configuration.nix
+        ./hosts/desktop/configuration.nix
         inputs.home-manager.nixosModules.default
         {
           home-manager.sharedModules = [
-            inputs.plasma-manager.homeManagerModules.plasma-manager
+            inputs.plasma-manager.homeModules.plasma-manager
           ];
         }
       ];
