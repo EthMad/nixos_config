@@ -32,6 +32,9 @@
    
 
    libreoffice
+   
+
+   distrobox
 
    ];
 

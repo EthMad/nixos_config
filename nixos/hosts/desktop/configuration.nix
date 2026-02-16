@@ -156,4 +156,15 @@
   # Enabling flatpaks for Sober a way to play roblox on linux
   services.flatpak.enable = true;
 
+
+  # Enabling virtualization for distrobox
+  virtualisation.containers.enable = true;
+  
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
+
+
 }
