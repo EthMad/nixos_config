@@ -3,10 +3,8 @@
 
   inputs = {
     # Keep stable nixpkgs for most of the system
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # Add unstable nixpkgs for packages that require it
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
        url = "github:nix-community/home-manager/release-25.11";
@@ -22,24 +20,16 @@
     # Noctalia shell - uses unstable nixpkgs
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
 
 
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, ... }@inputs:
+  outputs = { self, nixpkgs, ... }@inputs:
     let
       system = "x86_64-linux";
-
-      # Create an overlay to make unstable packages available
-      overlay-unstable = final: prev: {
-        unstable = import nixpkgs-unstable {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      };
     in {
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
       inherit system;
@@ -47,11 +37,6 @@
         inherit inputs;
       };
       modules = [
-        # Add the overlay so we can access pkgs.unstable
-        ({ config, pkgs, ... }: {
-          nixpkgs.overlays = [ overlay-unstable ];
-        })
-
         ./hosts/desktop/configuration.nix
         inputs.home-manager.nixosModules.default
         {
