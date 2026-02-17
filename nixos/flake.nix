@@ -7,7 +7,7 @@
 
 
     home-manager = {
-       url = "github:nix-community/home-manager/release-25.11";
+       url = "github:nix-community/home-manager";
        inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -45,6 +45,23 @@
           ];
 
           #home-manager.backupFileExtension = "backup";
+        }
+      ];
+    };
+    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs;
+      };
+      modules = [
+        ./hosts/laptop/configuration.nix
+        inputs.home-manager.nixosModules.default
+        {
+          home-manager.sharedModules = [
+            inputs.plasma-manager.homeModules.plasma-manager
+          ];
+
+          home-manager.backupFileExtension = "backup";
         }
       ];
     };
