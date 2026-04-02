@@ -22,6 +22,7 @@
 
    prismlauncher
    jdk8
+   jdk21
 
    git
 
@@ -35,6 +36,8 @@
    
 
    distrobox
+
+   opencode
 
    ];
 

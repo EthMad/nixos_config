@@ -164,7 +164,17 @@
     enable = true;
     dockerCompat = true;
   };
+  
 
+  # Enabling support for OpenGL
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;  # needed for LWJGL natives
+    extraPackages = with pkgs; [
+      mesa
+      rocmPackages.clr  # OpenCL, optional but useful
+    ];
+  };	
 
 
 }

@@ -86,20 +86,30 @@
   };
 
   # ============================================================================
-  # PLASMA CONFIGURATION (keeping your existing setup)
+  # PLASMA CONFIGURATION
   # ============================================================================
   programs.plasma = {
     enable = true;
-    workspace.wallpaper = "${config.home.homeDirectory}/Pictures/wallpaper.png";
+    workspace = {
+      wallpaperSlideShow = {
+        path = "${config.home.homeDirectory}/Pictures/wallpapers";
+        interval = 86400; # 86400 seconds = 24 hours (daily rotation)
+      };
+    };
   };
 
   # ============================================================================
   # FILE MANAGEMENT
   # ============================================================================
   home.file = {
-    "Pictures/wallpaper.png".source = ./files/wallhaven-yqqywk_3840x2160.png;
+    # Symlink ~/Pictures/wallpapers -> /etc/nixos/files/wallpapers
+    # Using mkOutOfStoreSymlink so you can drop new wallpapers in freely
+    # without needing to rebuild — just add files to /etc/nixos/files/wallpapers/
+    "Pictures/wallpapers" = {
+      source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/hosts/desktop/files/wallpapers";
+    };
   };
-
+  
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'.
   home.sessionVariables = {
