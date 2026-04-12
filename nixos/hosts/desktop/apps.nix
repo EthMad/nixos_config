@@ -39,6 +39,14 @@
 
    opencode
 
+
+   (llama-cpp.override { rocmSupport = true; })
+    
+   # Monitor GPU
+   rocmPackages.rocm-smi
+   amdgpu_top
+
+
    ];
 
   programs.steam = {

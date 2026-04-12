@@ -166,6 +166,11 @@
   };
   
 
+  # Required for the 6700 XT to work with ROCm
+  environment.variables = {
+    HSA_OVERRIDE_GFX_VERSION = "10.3.0";
+  };
+
   # Enabling support for OpenGL
   hardware.graphics = {
     enable = true;
