@@ -134,8 +134,9 @@
   # Or disable the firewall altogether.
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 25566 ];  # Minecraft port
+    allowedTCPPorts = [ 25566 8080 9090 ];  # Minecraft port, llama-server port, cockpit port
     # Optional: allowedUDPPorts = [ 25566 ]; # For LAN discovery
+    trustedInterfaces = [ "tailscale0" ];  
   };
 
 

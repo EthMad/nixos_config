@@ -23,7 +23,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
@@ -35,6 +38,7 @@
       inherit system;
       specialArgs = {
         inherit inputs;
+	llm-agents-pkgs = inputs.llm-agents.packages.${system};
       };
       modules = [
         ./hosts/desktop/configuration.nix
