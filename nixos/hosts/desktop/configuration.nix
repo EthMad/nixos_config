@@ -11,6 +11,7 @@
       ./apps.nix
       ../../modules/apps.nix
       #./sway.nix
+      ./llama-cpp-rocm.nix
     ];
 
   # Bootloader.
@@ -29,6 +30,8 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.networkmanager.appendNameservers = [ "1.1.1.1" "8.8.8.8" ];
+
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -88,6 +91,7 @@
   #adding xwayland and gamescope for niri to be able to run steam
   environment.systemPackages = [
     pkgs.xwayland-satellite
+    inputs.mcp-nixos.packages.${pkgs.system}.default
   ];
   programs.gamescope.enable = true;
 
@@ -128,13 +132,19 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
+  services.openssh = {
+    enable = true;
+    ports = [ 2222 ];
+    listenAddresses = [{ addr = "0.0.0.0"; port = 2222; }];
+  };
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 25566 8080 9090 ];  # Minecraft port, llama-server port, cockpit port
+    allowedTCPPorts = [ 22 2222 25566 8080 9090 ];  # Minecraft port, llama-server port, cockpit port
     # Optional: allowedUDPPorts = [ 25566 ]; # For LAN discovery
     trustedInterfaces = [ "tailscale0" ];  
   };

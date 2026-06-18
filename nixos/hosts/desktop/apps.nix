@@ -36,7 +36,8 @@
    
    distrobox
    opencode
-   (llama-cpp.override { rocmSupport = true; })
+   #(llama-cpp.override { rocmSupport = true; })
+   
    # Monitor GPU
    rocmPackages.rocm-smi
    amdgpu_top
@@ -58,8 +59,9 @@
       port = 9090;
       settings = {
          WebService = {
-	 AllowUnencrypted = lib.mkForce "true";
-         };
+	    AllowUnencrypted = lib.mkForce "false";
+            Origins = lib.mkForce "https://100.111.140.18:9090 https://nixos.ts.net:9090"; 
+	 };
       };
    };
 

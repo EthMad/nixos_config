@@ -28,6 +28,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    mcp-nixos.url = "github:utensils/mcp-nixos";
+    
+    llama-cpp = {
+       url = "github:ggml-org/llama.cpp";
+       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
