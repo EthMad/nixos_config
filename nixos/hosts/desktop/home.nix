@@ -27,65 +27,6 @@
   ];
 
   # ============================================================================
-  # NOCTALIA SHELL CONFIGURATION
-  # All configuration is done declaratively through Home Manager
-  # ============================================================================
-  programs.noctalia-shell = {
-    enable = true;
-
-    settings = {
-      bar = {
-        density = "default";
-        position = "top";
-        showCapsule = true;
-        widgets = {
-          left = [
-            { id = "Launcher"; }
-            { id = "Clock"; }
-            { id = "ActiveWindow"; }
-          ];
-          center = [
-            { id = "Workspace"; }
-          ];
-          right = [
-            { id = "Tray"; }
-            { id = "NotificationHistory"; }
-            { id = "Battery"; }
-            { id = "Volume"; }
-            { id = "Brightness"; }
-            { id = "ControlCenter"; }
-          ];
-        };
-      };
-
-      general = {
-        avatarImage = "${config.home.homeDirectory}/.face";
-        radiusRatio = 1.0;
-      };
-
-      location = {
-        name = "Raleigh, North Carolina";
-        useFahrenheit = true;
-        use12hourFormat = true;
-      };
-
-      # Use the default Noctalia color scheme
-      # You can change this to other schemes like "Monochrome", "Catppuccin", etc.
-      colorSchemes.predefinedScheme = "Noctalia (default)";
-    };
-  };
-
-  # ============================================================================
-  # NIRI COMPOSITOR CONFIGURATION
-  # Using direct KDL configuration file (not the niri-flake module)
-  # This avoids build failures and uses the stable Niri from nixpkgs
-  # ============================================================================
-  xdg.configFile."niri" = {
-    source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dotfiles/niri";
-    recursive = true;
-  };
-
-  # ============================================================================
   # PLASMA CONFIGURATION
   # ============================================================================
   programs.plasma = {
