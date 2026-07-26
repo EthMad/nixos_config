@@ -10,8 +10,10 @@
    htop
    fastfetch
 
+
    firefox
    discord
+   slack
 
    steam
 
@@ -34,6 +36,8 @@
 
    libreoffice
    
+
+
    distrobox
    opencode
    #(llama-cpp.override { rocmSupport = true; })
@@ -44,7 +48,13 @@
    # VPN for remote AI hosting
    tailscale
    cockpit
+   
    vscode
+   kicad
+
+
+   ethtool
+
 
    # Packages from llm-agents flake
    llm-agents-pkgs.pi
@@ -53,18 +63,21 @@
    ];
    
    services.tailscale.enable = true;
-
+   # Cockpit — only accessible over Tailscale (100.64.0.0/10)
+   # Cockpit — only accessible over Tailscale (100.64.0.0/10)
    services.cockpit = {
-      enable = true;
-      port = 9090;
-      settings = {
-         WebService = {
-	    AllowUnencrypted = lib.mkForce "false";
-            Origins = lib.mkForce "https://100.111.140.18:9090 https://nixos.ts.net:9090"; 
-	 };
-      };
+     enable = true;
+     port = 9090;
+     openFirewall = false;  # we handle firewall manually via trustedInterfaces
+     settings = {
+       WebService = {
+         AllowUnencrypted = lib.mkForce "false";
+         Origins = lib.mkForce "https://100.111.140.18:9090 https://nixos.ts.net:9090";
+         # Bind only to Tailscale interface IP — not 0.0.0.0
+         ListenAddresses = "100.111.140.18:9090";
+       };
+     };
    };
-
 
    programs.steam = {
       enable = true;

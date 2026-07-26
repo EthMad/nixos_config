@@ -24,11 +24,19 @@
   home.packages = with pkgs; [
     vesktop
     alacritty  # Terminal emulator for Niri
+    neowall    # GPU shader wallpaper engine (PS3 XMB wave) - see neowall service below
   ];
 
   # ============================================================================
   # PLASMA CONFIGURATION
   # ============================================================================
+  # NOTE: neowall (see below) draws to its own Wayland layer-shell surface /
+  # X11 root window, NOT through Plasma's wallpaper plugin system. This means
+  # wallpaperSlideShow below and neowall are two independent rendering layers
+  # that can both be "on" at once but will visually compete for the same
+  # screen space. If neowall's PS3 wave shader is working the way you want,
+  # consider disabling wallpaperSlideShow (or just letting it sit idle behind
+  # neowall's surface) to avoid confusion about which one you're seeing.
   programs.plasma = {
     enable = true;
     workspace = {
@@ -48,6 +56,44 @@
     # without needing to rebuild — just add files to /etc/nixos/files/wallpapers/
     "Pictures/wallpapers" = {
       source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/hosts/desktop/files/wallpapers";
+    };
+  };
+
+  # ============================================================================
+  # NEOWALL (PS3 XMB WAVE LIVE WALLPAPER)
+  # ============================================================================
+  # GPU shader wallpaper engine (https://github.com/1ay1/neowall), packaged
+  # natively in nixpkgs. Renders unmodified Shadertoy GLSL directly via EGL,
+  # pauses itself when a window covers the screen.
+  #
+  # Shader source is the "Ps3 XMB Wave" Shadertoy (fcf3Dn), a fullscreen-
+  # optimized fork of int_45h's original (XdGfRR) intended for wallpaper use.
+  xdg.configFile = {
+    "neowall/shaders/ps3_wave.glsl".source = ./files/ps3_wave.glsl;
+    "neowall/config.vibe".text = ''
+      default {
+        shader ps3_wave.glsl
+        shader_speed 1.0
+      }
+    '';
+  };
+
+  # Autostart neowall with the graphical Plasma session. Restarts on crash.
+  systemd.user.services.neowall = {
+    Unit = {
+      Description = "neowall GPU shader wallpaper (PS3 XMB wave)";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "forking";
+      ExecStart = "${pkgs.neowall}/bin/neowall";
+      ExecStop = "${pkgs.neowall}/bin/neowall kill";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
     };
   };
   

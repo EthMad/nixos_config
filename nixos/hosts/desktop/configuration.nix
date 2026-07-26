@@ -32,6 +32,10 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.appendNameservers = [ "1.1.1.1" "8.8.8.8" ];
 
+  # Cjamged arpimd drivers to see if I can get better internet speeds
+  boot.extraModulePackages = [ config.boot.kernelPackages.r8125 ];
+  boot.blacklistedKernelModules = [ "r8169" ];
+  boot.kernelModules = [ "r8125" ];
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -131,12 +135,18 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
   services.openssh = {
     enable = true;
     ports = [ 2222 ];
-    listenAddresses = [{ addr = "0.0.0.0"; port = 2222; }];
+    listenAddresses = [{ addr = "127.0.0.1"; port = 2222; }];  # localhost only
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+      MaxAuthTries = 3;
+      AllowUsers = [ "ethan" ];
+    };
   };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
