@@ -76,5 +76,23 @@
         }
       ];
     };
+    nixosConfigurations."5820" = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs;
+        llm-agents-pkgs = inputs.llm-agents.packages.${system};
+      };
+      modules = [
+        ./hosts/5820/configuration.nix
+        inputs.home-manager.nixosModules.default
+        {
+          home-manager.sharedModules = [
+            inputs.plasma-manager.homeModules.plasma-manager
+          ];
+
+          #home-manager.backupFileExtension = "backup";
+        }
+      ];
+    };
   };
 }
