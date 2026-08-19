@@ -3,7 +3,7 @@
 {
   environment.systemPackages = with pkgs; [
     # Pull the official, cached nixpkgs binary
-    llama-cpp-vulkan
+    llama-cpp-rocm
     mcp-nixos
   ];
 }
