@@ -11,7 +11,7 @@
       ./apps.nix
       ../../modules/apps.nix
       #./sway.nix
-      ./llama-cpp-rocm.nix
+      ./llama-cpp-vulkan.nix
     ];
 
   # Bootloader.

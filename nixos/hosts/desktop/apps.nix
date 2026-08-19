@@ -51,10 +51,11 @@
    
    vscode
    kicad
-
+   (callPackage ./stm32cubemx-latest.nix { })
 
    ethtool
-
+   parted
+   pciutils
 
    # Packages from llm-agents flake
    llm-agents-pkgs.pi
