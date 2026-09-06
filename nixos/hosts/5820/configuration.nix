@@ -11,6 +11,7 @@
       ./apps.nix
       ../../modules/apps.nix
       ./llama-cpp-vulkan.nix
+ ./llama-cpp-rdna2.nix
     ];
 
   # Bootloader.
@@ -20,7 +21,7 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "5820"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -87,25 +88,6 @@
     #media-session.enable = true;
   };
 
-  # ============================================================================
-  # NIRI COMPOSITOR - Enable at system level
-  # ============================================================================
-  programs.niri.enable = true;
-  #adding xwayland and gamescope for niri to be able to run steam
-  environment.systemPackages = [
-    pkgs.xwayland-satellite
-    inputs.mcp-nixos.packages.${pkgs.system}.default
-  ];
-  programs.gamescope.enable = true;
-
-  # ============================================================================
-  # REQUIRED SERVICES FOR NOCTALIA
-  # These services are required for Noctalia's wifi, bluetooth, power-profile,
-  # and battery features to work properly
-  # ============================================================================
-  hardware.bluetooth.enable = true;
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.ethan = {
@@ -136,8 +118,7 @@
   # services.openssh.enable = true;
   services.openssh = {
     enable = true;
-    ports = [ 2222 ];
-    listenAddresses = [{ addr = "127.0.0.1"; port = 2222; }];  # localhost only
+    ports = [ 22 ];
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = "no";
@@ -199,10 +180,7 @@
   };
   
 
-  # Required for the 6700 XT to work with ROCm
-  environment.variables = {
-    HSA_OVERRIDE_GFX_VERSION = "10.3.0";
-  };
+
 
   # Enabling support for OpenGL
   hardware.graphics = {

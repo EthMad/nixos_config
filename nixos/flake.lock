@@ -152,6 +152,23 @@
         "type": "github"
       }
     },
+    "llama-rdna2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787615134,
+        "narHash": "sha256-6EfehZErnJq2WnmFtL0WgIbcCVfj96Y6EdvG4Ue7HXU=",
+        "owner": "edwinbrowwn",
+        "repo": "llama.cpp-rdna2",
+        "rev": "29be82a64991601a562e3db635c2f443acc8892e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edwinbrowwn",
+        "ref": "master",
+        "repo": "llama.cpp-rdna2",
+        "type": "github"
+      }
+    },
     "llm-agents": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -305,6 +322,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "llama-cpp": "llama-cpp",
+        "llama-rdna2": "llama-rdna2",
         "llm-agents": "llm-agents",
         "mcp-nixos": "mcp-nixos",
         "nixpkgs": "nixpkgs_2",
