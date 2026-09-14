@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ./apps.nix
       ../../modules/apps.nix
-      ./llama-cpp-vulkan.nix
+      ./llama-cpp-rocm.nix
  ./llama-cpp-rdna2.nix
     ];
 
@@ -177,6 +177,13 @@
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
+  };
+  # Open WebUI - web frontend for the llama-server on port 8080
+  services.open-webui = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 3000;
+    openFirewall = true;
   };
   
 
