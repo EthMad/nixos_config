@@ -21,6 +21,20 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # V620 power tuning: patch the kernel so amdgpu reports a 120 W minimum PPT
+  # limit for the Radeon PRO V620 (its VBIOS locks the floor to 250 W, which
+  # makes any lower cap rejected with EINVAL). With this, sysfs power1_cap
+  # accepts values down to 120 W.
+  # See: https://blivioniag.github.io/gfx1030-wiki/tuning/power.html
+  # Note: first build compiles the kernel locally (one-time cost); the patch
+  # is re-applied automatically on every kernel update.
+  boot.kernelPatches = [
+    {
+      name = "v620-powercap-min-120W";
+      patch = ./files/v620-powercap-min-120W.patch;
+    }
+  ];
+
   networking.hostName = "5820"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -36,6 +50,33 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.r8125 ];
   boot.blacklistedKernelModules = [ "r8169" ];
   boot.kernelModules = [ "r8125" ];
+
+  # Disable GECC (on-board VRAM ECC) on the V620 — it's on by factory default
+  # and costs ~2 GB of the 32 GB (30,704 MiB visible instead of 32,768).
+  # No kernel rebuild needed: plain kernel parameter, works on 6.x/7.x.
+  # Requires TWO reboots with the parameter present: first boot arms the
+  # disable ("GECC will be disabled in next boot cycle"), second boot applies
+  # it ("amdgpu: GECC is disabled"). NixOS keeps the param on every boot,
+  # so both reboots satisfy this. To re-enable: remove this line, reboot twice.
+  # See: https://blivioniag.github.io/gfx1030-wiki/tuning/ecc.html
+  boot.kernelParams = [ "amdgpu.ras_enable=0" ];
+
+  # Apply a 180 W power cap to the V620 at boot (the wiki's recommended
+  # default; 120-170 W is the community sweet spot, 160/140 W if the PSU
+  # trips on prefill transients). The script waits up to 60 s for the amdgpu
+  # hwmon nodes and matches the card by PCI ID (1002:73a1 / 1002:0e34), so
+  # no fragile ordering against module load is needed.
+  systemd.services.v620-powercap = {
+    description = "Apply 180 W power cap to Radeon PRO V620 cards";
+    wantedBy = [ "multi-user.target" ];
+    unitConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ${pkgs.bash}/bin/bash ${./files/v620-cap-apply.sh} 180
+    '';
+  };
 
   # Set your time zone.
   time.timeZone = "America/New_York";
