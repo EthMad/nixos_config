@@ -42,6 +42,8 @@
       url = "github:edwinbrowwn/llama.cpp-rdna2/master";
       flake = false;
     };
+    
+    nixos-hardware.url = "path:/etc/nixos-hw";
 
   };
 
@@ -128,6 +130,25 @@
 
           #home-manager.backupFileExtension = "backup";
         }
+      ];
+    };
+    nixosConfigurations."macpro" = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs;
+        llm-agents-pkgs = inputs.llm-agents.packages.${system};
+      };
+      modules = [
+        inputs.nixos-hardware.nixosModules.apple-t2
+        ./hosts/macpro/configuration.nix
+        inputs.home-manager.nixosModules.default
+        {
+          home-manager.sharedModules = [
+            inputs.plasma-manager.homeModules.plasma-manager
+          ];
+
+          #home-manager.backupFileExtension = "backup";
+        }  
       ];
     };
   };
